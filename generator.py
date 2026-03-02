@@ -2,7 +2,7 @@ from google import genai
 import os
 
 # Use environment variable (recommended)
-# client = genai.Client(api_key="AIzaSyC5BBMamI75SoRZXwUyo0AJt9v0nYqRTO8")
+# client = genai.Client(api_key="")
 
 def generate_report(findings, context):
 
@@ -30,5 +30,6 @@ Add disclaimer that this is not medical advice.
         model="gemini-2.5-flash",
         contents=prompt
     )
+
 
     return response.text
