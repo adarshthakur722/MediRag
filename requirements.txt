@@ -1,6 +1,7 @@
 sentence-transformers
 faiss-cpu
 pdfplumber
-openai
+google-genai
 numpy
 streamlit
+python-dotenv

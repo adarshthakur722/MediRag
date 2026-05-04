@@ -1,52 +1,92 @@
-import pdfplumber
 import re
 
-def extract_values(pdf_path):
-    results = {}
+import pdfplumber
+
+
+def extract_text(pdf_path):
+    text = ""
 
     with pdfplumber.open(pdf_path) as pdf:
-        text = ""
         for page in pdf.pages:
             extracted = page.extract_text()
             if extracted:
                 text += extracted + "\n"
 
+            for table in page.extract_tables() or []:
+                for row in table:
+                    cells = [cell.strip() for cell in row if cell and cell.strip()]
+                    if cells:
+                        text += " ".join(cells) + "\n"
+
+    return text.strip()
+
+
+def parse_lab_text(text):
+    results = {}
+
     if not text:
-        print("⚠ No text extracted from PDF.")
         return results
 
-    # Pattern captures:
-    # Test name | value | unit | reference range
-    pattern = r"""
-        ([A-Za-z\s\(\):]+?)      # Test name
-        \s+
-        ([<>]?\d+\.?\d*)         # Result value
-        \s+
-        ([a-zA-Z\/%]+)?          # Units (optional)
-        \s+
-        (\d+\.?\d*\s*-\s*\d+\.?\d*|<\d+\.?\d*)   # Reference range
-    """
+    patterns = [
+        r"""
+            (?P<test>[A-Za-z][A-Za-z\s\(\):/%#.-]{1,60}?)
+            \s+
+            (?P<value>[<>]?\d+(?:\.\d+)?)
+            \s*
+            (?P<unit>[A-Za-z/%]+)?
+            \s+
+            (?P<range>\d+(?:\.\d+)?\s*-\s*\d+(?:\.\d+)?|[<>]\s*\d+(?:\.\d+)?)
+        """,
+        r"""
+            (?P<test>[A-Za-z][A-Za-z\s\(\):/%#.-]{1,60}?)
+            \s*[:|-]\s*
+            (?P<value>[<>]?\d+(?:\.\d+)?)
+            \s*
+            (?P<unit>[A-Za-z/%]+)?
+            .*?
+            (?P<range>\d+(?:\.\d+)?\s*-\s*\d+(?:\.\d+)?|[<>]\s*\d+(?:\.\d+)?)
+        """,
+    ]
 
-    matches = re.findall(pattern, text, re.VERBOSE)
+    for pattern in patterns:
+        for match in re.finditer(pattern, text, re.VERBOSE | re.IGNORECASE):
+            _add_result(
+                results,
+                match.group("test"),
+                match.group("value"),
+                match.group("unit"),
+                match.group("range"),
+            )
 
-    for match in matches:
-        test_name = match[0].strip()
-        raw_value = match[1]
-        unit = match[2]
-        ref_range = match[3]
+    return results
 
-        clean_value = raw_value.replace("<", "").replace(">", "")
 
-        try:
-            value = float(clean_value)
-        except:
-            continue
+def _add_result(results, test_name, raw_value, unit, ref_range):
+    test_name = re.sub(r"\s+", " ", test_name).strip(" :-")
+    clean_value = raw_value.replace("<", "").replace(">", "").strip()
 
-        results[test_name] = {
-            "value": value,
-            "unit": unit,
-            "reference_range": ref_range
-        }
+    if len(test_name) < 2:
+        return
 
+    try:
+        value = float(clean_value)
+    except ValueError:
+        return
+
+    results[test_name] = {
+        "value": value,
+        "unit": (unit or "").strip(),
+        "reference_range": re.sub(r"\s+", " ", ref_range).strip(),
+    }
+
+
+def extract_values(pdf_path):
+    text = extract_text(pdf_path)
+
+    if not text:
+        print("No text extracted from PDF.")
+        return {}
+
+    results = parse_lab_text(text)
     print("Extracted structured results:", results)
     return results
