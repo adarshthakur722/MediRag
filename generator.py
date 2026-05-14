@@ -44,7 +44,7 @@ def _clean_api_error(error):
     return "AI analysis failed. Check the API key and internet connection, then try again."
 
 
-def generate_report(findings, context):
+def generate_report(findings, context, medication_context=""):
     if not findings.strip():
         return "No lab values detected."
 
@@ -57,30 +57,46 @@ Lab Findings:
 Medical Knowledge:
 {context}
 
+Medication Information:
+{medication_context or "No medication information provided."}
+
 Explain clearly:
 - What is abnormal
 - What it may indicate
 - Whether it looks serious
-- When to consult a doctor
+- Important medication precautions if relevant
+- Possible medication-related lab concerns
 
 If Lab Findings are empty, say "No lab values detected."
+
+Do NOT diagnose diseases.
+Do NOT prescribe medicines.
+
+Keep explanations concise and patient-friendly.
 
 Add disclaimer that this is not medical advice.
 """
 
     try:
         client = _create_client()
+
         response = client.models.generate_content(
             model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
             contents=prompt,
         )
+
     except Exception as exc:
         raise RuntimeError(_clean_api_error(exc)) from exc
 
     return response.text
 
 
-def generate_report_feedback(report_text, findings="", context=""):
+def generate_report_feedback(
+    report_text,
+    findings="",
+    context="",
+    medication_context="",
+):
     if not report_text.strip() and not findings.strip():
         return "No readable report text or lab values detected."
 
@@ -95,6 +111,9 @@ Extracted Lab Findings:
 Retrieved Medical Knowledge:
 {context or "No retrieved context was available."}
 
+Medication Information:
+{medication_context or "No medication information provided."}
+
 Raw Report Text:
 {report_text[:12000]}
 
@@ -103,17 +122,127 @@ Give feedback in this structure:
 2. Abnormal or concerning values
 3. Values that look normal
 4. Possible meaning in simple language
-5. What to discuss with a doctor
+5. Medication-related precautions if relevant
 
-Do not diagnose. Add a disclaimer that this is not medical advice.
+Do not diagnose.
+Do not prescribe medicines.
+
+Keep explanations concise and easy to understand.
+
+Add a disclaimer that this is not medical advice.
 """
 
     try:
         client = _create_client()
+
         response = client.models.generate_content(
             model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
             contents=prompt,
         )
+
+    except Exception as exc:
+        raise RuntimeError(_clean_api_error(exc)) from exc
+
+    return response.text
+
+
+def generate_doctor_questions(
+    findings,
+    context="",
+    medication_context="",
+):
+    if not findings.strip():
+        return ""
+
+    prompt = f"""
+You are helping a patient prepare for a doctor consultation.
+
+Based on the lab report findings, retrieved medical knowledge, and medications,
+generate useful questions the patient may ask their doctor.
+
+IMPORTANT:
+- Do NOT diagnose diseases
+- Do NOT prescribe medicines
+- Keep questions short and practical
+- Avoid repeating similar questions
+- Focus on abnormal findings and medication-related concerns
+
+Lab Findings:
+{findings}
+
+Medical Knowledge:
+{context}
+
+Medication Information:
+{medication_context}
+
+Generate:
+- 5 to 10 patient-friendly questions
+- Use bullet points
+- Keep the tone simple and helpful
+"""
+
+    try:
+        client = _create_client()
+
+        response = client.models.generate_content(
+            model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+            contents=prompt,
+        )
+
+    except Exception as exc:
+        raise RuntimeError(_clean_api_error(exc)) from exc
+
+    return response.text
+
+
+def summarize_medication_info(raw_medication_text):
+
+    prompt = f"""
+You are a medical assistant.
+
+Summarize the medication information into concise,
+patient-friendly sections.
+
+Keep only the MOST IMPORTANT information.
+
+Return ONLY valid JSON.
+
+Format:
+{{
+    "purpose": "...",
+    "usage": "...",
+    "warnings": "...",
+    "side_effects": "...",
+    "dosage": "..."
+}}
+
+Rules:
+- Keep responses concise
+- Maximum 2-4 important points
+- Avoid technical jargon
+- Remove repetitive information
+- Focus on patient safety
+- Do NOT hallucinate
+- Do NOT include markdown
+- Do NOT include explanations outside JSON
+
+Medication Information:
+{raw_medication_text}
+"""
+
+    try:
+
+        client = _create_client()
+
+        response = client.models.generate_content(
+            model=os.getenv(
+                "GEMINI_MODEL",
+                "gemini-2.5-flash",
+            ),
+            contents=prompt,
+        )
+
     except Exception as exc:
         raise RuntimeError(_clean_api_error(exc)) from exc
 

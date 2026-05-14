@@ -36,6 +36,8 @@ You can turn off AI generation in the sidebar and still use PDF extraction, rang
 - `retriever.py`: Loads FAISS index and retrieves medical knowledge
 - `generator.py`: Calls Gemini to generate the final explanation
 - `build_index.py`: Rebuilds `faiss_index.bin` and `stored_texts.json` from `data/medical_knowledge.json`
+- `medication_api.py`: Fetches and summarizes medication information using OpenFDA and Gemini
+- `medication_checker.py`: Processes medications, groups duplicates, and generates lab-related medication warnings
 
 ## Notes
 
