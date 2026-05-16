@@ -1,0 +1,11 @@
+sentence-transformers
+faiss-cpu
+pdfplumber
+google-genai
+numpy
+streamlit
+python-dotenv
+torchvision
+dotenv
+requests
+langchain-groq

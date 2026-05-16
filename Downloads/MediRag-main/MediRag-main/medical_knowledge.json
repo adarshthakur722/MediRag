@@ -1,0 +1,211 @@
+[
+  {
+    "test_name": "Hemoglobin",
+    "category": "CBC",
+    "unit": "g/dL",
+    "normal_range_male": [13.5, 17.5],
+    "normal_range_female": [12.0, 15.5],
+    "low_meaning": "May indicate anemia, blood loss, nutritional deficiency, chronic disease, or kidney issues.",
+    "high_meaning": "May indicate dehydration, lung disease, polycythemia, or high altitude adaptation.",
+    "severity_thresholds": {
+      "mild_low": 11.0,
+      "severe_low": 8.0
+    }
+  },
+  {
+    "test_name": "RBC",
+    "category": "CBC",
+    "unit": "million cells/mcL",
+    "normal_range_male": [4.7, 6.1],
+    "normal_range_female": [4.2, 5.4],
+    "low_meaning": "May indicate anemia, bone marrow suppression, or blood loss.",
+    "high_meaning": "May indicate dehydration, lung disease, or polycythemia."
+  },
+  {
+    "test_name": "WBC",
+    "category": "CBC",
+    "unit": "cells/mcL",
+    "normal_range": [4000, 11000],
+    "low_meaning": "May indicate viral infection, bone marrow disorder, autoimmune disease, or chemotherapy effect.",
+    "high_meaning": "May indicate infection, inflammation, stress, leukemia, or medication reaction."
+  },
+  {
+    "test_name": "Platelets",
+    "category": "CBC",
+    "unit": "cells/mcL",
+    "normal_range": [150000, 450000],
+    "low_meaning": "May cause bleeding risk due to thrombocytopenia.",
+    "high_meaning": "May increase clotting risk due to thrombocytosis."
+  },
+  {
+    "test_name": "ALT",
+    "category": "Liver Panel",
+    "unit": "U/L",
+    "normal_range_male": [10, 45],
+    "normal_range_female": [7, 35],
+    "low_meaning": "Usually not clinically significant.",
+    "high_meaning": "May indicate liver inflammation, hepatitis, fatty liver disease, or drug toxicity."
+  },
+  {
+    "test_name": "AST",
+    "category": "Liver Panel",
+    "unit": "U/L",
+    "normal_range": [8, 48],
+    "low_meaning": "Not usually significant.",
+    "high_meaning": "May indicate liver damage, muscle injury, alcohol-related liver disease."
+  },
+  {
+    "test_name": "ALP",
+    "category": "Liver Panel",
+    "unit": "U/L",
+    "normal_range": [40, 129],
+    "low_meaning": "May indicate malnutrition or zinc deficiency.",
+    "high_meaning": "May indicate bile duct obstruction, bone disease, or liver disorder."
+  },
+  {
+    "test_name": "Total Bilirubin",
+    "category": "Liver Panel",
+    "unit": "mg/dL",
+    "normal_range": [0.1, 1.2],
+    "low_meaning": "Usually not clinically significant.",
+    "high_meaning": "May indicate jaundice, liver dysfunction, bile obstruction, or hemolysis."
+  },
+  {
+    "test_name": "Albumin",
+    "category": "Liver Panel",
+    "unit": "g/dL",
+    "normal_range": [3.5, 5.0],
+    "low_meaning": "May indicate chronic liver disease, kidney disease, or malnutrition.",
+    "high_meaning": "May indicate dehydration."
+  },
+  {
+    "test_name": "Creatinine",
+    "category": "Kidney Panel",
+    "unit": "mg/dL",
+    "normal_range": [0.7, 1.3],
+    "low_meaning": "May indicate low muscle mass.",
+    "high_meaning": "May indicate reduced kidney function or dehydration."
+  },
+  {
+    "test_name": "BUN",
+    "category": "Kidney Panel",
+    "unit": "mg/dL",
+    "normal_range": [7, 20],
+    "low_meaning": "May indicate malnutrition.",
+    "high_meaning": "May indicate kidney stress, dehydration, or high protein intake."
+  },
+  {
+    "test_name": "eGFR",
+    "category": "Kidney Panel",
+    "unit": "mL/min",
+    "normal_range": [90, 120],
+    "low_meaning": "Below 60 may indicate chronic kidney disease.",
+    "high_meaning": "Usually not clinically significant."
+  },
+  {
+    "test_name": "TSH",
+    "category": "Thyroid Panel",
+    "unit": "mIU/L",
+    "normal_range": [0.4, 4.0],
+    "low_meaning": "May indicate hyperthyroidism.",
+    "high_meaning": "May indicate hypothyroidism."
+  },
+  {
+    "test_name": "Free T4",
+    "category": "Thyroid Panel",
+    "unit": "ng/dL",
+    "normal_range": [0.9, 1.7],
+    "low_meaning": "May indicate hypothyroidism.",
+    "high_meaning": "May indicate hyperthyroidism."
+  },
+  {
+    "test_name": "Total Cholesterol",
+    "category": "Lipid Panel",
+    "unit": "mg/dL",
+    "normal_range": [0, 200],
+    "low_meaning": "Usually not concerning.",
+    "high_meaning": "May increase risk of heart disease."
+  },
+  {
+    "test_name": "LDL",
+    "category": "Lipid Panel",
+    "unit": "mg/dL",
+    "normal_range": [0, 100],
+    "low_meaning": "Protective for heart.",
+    "high_meaning": "Increases risk of atherosclerosis and heart disease."
+  },
+  {
+    "test_name": "HDL",
+    "category": "Lipid Panel",
+    "unit": "mg/dL",
+    "normal_range": [40, 100],
+    "low_meaning": "Increases cardiovascular risk.",
+    "high_meaning": "Protective for heart health."
+  },
+  {
+    "test_name": "Triglycerides",
+    "category": "Lipid Panel",
+    "unit": "mg/dL",
+    "normal_range": [0, 150],
+    "low_meaning": "Usually not concerning.",
+    "high_meaning": "Associated with metabolic syndrome and cardiovascular risk."
+  },
+  {
+    "test_name": "Ferritin",
+    "category": "Iron Profile",
+    "unit": "ng/mL",
+    "normal_range_male": [24, 336],
+    "normal_range_female": [11, 307],
+    "low_meaning": "Suggests iron deficiency.",
+    "high_meaning": "May indicate iron overload, inflammation, or liver disease."
+  },
+  {
+    "test_name": "Serum Iron",
+    "category": "Iron Profile",
+    "unit": "mcg/dL",
+    "normal_range_male": [80, 180],
+    "normal_range_female": [60, 160],
+    "low_meaning": "May indicate iron deficiency.",
+    "high_meaning": "May indicate iron overload."
+  },
+  {
+    "test_name": "TIBC",
+    "category": "Iron Profile",
+    "unit": "mcg/dL",
+    "normal_range": [240, 450],
+    "low_meaning": "May indicate iron overload or chronic disease.",
+    "high_meaning": "Suggests iron deficiency."
+  },
+  {
+    "test_name": "CRP",
+    "category": "Inflammation",
+    "unit": "mg/L",
+    "normal_range": [0, 10],
+    "low_meaning": "Normal inflammation level.",
+    "high_meaning": "May indicate infection, inflammation, autoimmune disease, or cardiovascular risk."
+  },
+  {
+    "test_name": "Procalcitonin",
+    "category": "Infection Marker",
+    "unit": "ng/mL",
+    "normal_range": [0, 0.1],
+    "low_meaning": "Normal, bacterial infection unlikely.",
+    "high_meaning": "May indicate bacterial infection or sepsis."
+  },
+  {
+    "test_name": "Sodium",
+    "category": "Electrolytes",
+    "unit": "mEq/L",
+    "normal_range": [135, 145],
+    "low_meaning": "May cause confusion, seizures (hyponatremia).",
+    "high_meaning": "May indicate dehydration or kidney issues."
+  },
+  {
+    "test_name": "Potassium",
+    "category": "Electrolytes",
+    "unit": "mEq/L",
+    "normal_range": [3.5, 5.0],
+    "low_meaning": "May cause muscle weakness or arrhythmia.",
+    "high_meaning": "May cause dangerous heart rhythm disturbances."
+  }
+]
