@@ -1,0 +1,31 @@
+# Virtual environments
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Streamlit secrets/cache
+# .streamlit/secrets.toml
+# .streamlit/cache/
+
+# SQLite database
+users.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# macOS/Windows system files
+.DS_Store
+Thumbs.db
+
+# Optional: Don't upload test/sample PDFs
+*.pdf
