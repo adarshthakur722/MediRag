@@ -15,6 +15,10 @@ def _load_knowledge():
 
 
 knowledge = _load_knowledge()
+knowledge_by_test = {}
+
+for item in knowledge:
+    knowledge_by_test.setdefault(item["test_name"].lower(), item)
 
 
 def check_reference_range(value, reference_range):
@@ -48,17 +52,18 @@ def check_reference_range(value, reference_range):
 
 
 def check_status(test_name, value, gender="male"):
-    for item in knowledge:
-        if item["test_name"].lower() == test_name.lower():
-            if "normal_range_male" in item:
-                low, high = item.get(f"normal_range_{gender}", item["normal_range_male"])
-            else:
-                low, high = item["normal_range"]
+    item = knowledge_by_test.get(test_name.lower())
 
-            if value < low:
-                return "low"
-            if value > high:
-                return "high"
-            return "normal"
+    if item:
+        if "normal_range_male" in item:
+            low, high = item.get(f"normal_range_{gender}", item["normal_range_male"])
+        else:
+            low, high = item["normal_range"]
+
+        if value < low:
+            return "low"
+        if value > high:
+            return "high"
+        return "normal"
 
     return "unknown"

@@ -7,6 +7,7 @@ from lab_pipeline import analyze_pdf, analyze_values
 from pdf_extractor import parse_lab_text
 from database import create_tables
 from auth import authentication, logout
+from pdf_export import build_analysis_pdf
 
 
 
@@ -429,4 +430,17 @@ for index, item in enumerate(analysis_results, start=1):
             render_report_result(
                 result,
                 f"{index}-{report_name}",
+            )
+
+            st.download_button(
+                "Download detailed analysis as PDF",
+                data=build_analysis_pdf(
+                    report_name,
+                    result,
+                    medications=medications,
+                ),
+                file_name=f"{Path(report_name).stem}_MediRag_analysis.pdf",
+                mime="application/pdf",
+                key=f"download-pdf-{index}",
+                use_container_width=True,
             )

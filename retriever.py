@@ -37,8 +37,19 @@ def _load_assets():
             stored_texts = json.load(f)
 
 
-def retrieve(query, k=1):
+def retrieve_many(queries, k=1):
+    """Retrieve context for multiple queries in one embedding-model pass."""
+    if not queries:
+        return []
+
     _load_assets()
-    embedding = model.encode([query])
-    distances, indices = index.search(np.array(embedding), k)
-    return [stored_texts[i] for i in indices[0] if 0 <= i < len(stored_texts)]
+    embeddings = model.encode(queries)
+    _, indices = index.search(np.asarray(embeddings, dtype=np.float32), k)
+    return [
+        [stored_texts[i] for i in row if 0 <= i < len(stored_texts)]
+        for row in indices
+    ]
+
+
+def retrieve(query, k=1):
+    return retrieve_many([query], k)[0]

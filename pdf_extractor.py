@@ -4,21 +4,21 @@ import pdfplumber
 
 
 def extract_text(pdf_path):
-    text = ""
+    text_parts = []
 
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
             extracted = page.extract_text()
             if extracted:
-                text += extracted + "\n"
+                text_parts.append(extracted)
 
             for table in page.extract_tables() or []:
                 for row in table:
                     cells = [cell.strip() for cell in row if cell and cell.strip()]
                     if cells:
-                        text += " ".join(cells) + "\n"
+                        text_parts.append(" ".join(cells))
 
-    return text.strip()
+    return "\n".join(text_parts).strip()
 
 
 def parse_lab_text(text):

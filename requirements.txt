@@ -9,3 +9,5 @@ torchvision
 dotenv
 requests
 langchain-groq
+bcrypt
+reportlab

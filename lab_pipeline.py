@@ -3,9 +3,9 @@ from generator import (
     generate_report_feedback,
     generate_doctor_questions,
 )
-from pdf_extractor import extract_text, extract_values
+from pdf_extractor import extract_text, parse_lab_text
 from range_checker import check_reference_range, check_status
-from retriever import retrieve
+from retriever import retrieve, retrieve_many
 from medication_checker import MedicationChecker
 
 med_checker = MedicationChecker()
@@ -16,8 +16,8 @@ def analyze_pdf(
     use_ai=True,
     medications=None,
 ):
-    values = extract_values(pdf_path)
     report_text = extract_text(pdf_path)
+    values = parse_lab_text(report_text)
 
     return analyze_values(
         values,
@@ -34,7 +34,6 @@ def analyze_values(
     medications=None,
 ):
     rows = []
-    context_parts = []
     medications = medications or []
 
     for test, data in values.items():
@@ -47,16 +46,6 @@ def analyze_values(
         if status == "unknown":
             status = check_status(test, value)
 
-        retrieved = []
-        retrieval_error = None
-
-        try:
-            retrieved = retrieve(f"{test} {status} meaning")
-            context_parts.extend(retrieved)
-
-        except Exception as exc:
-            retrieval_error = str(exc)
-
         rows.append(
             {
                 "test": test,
@@ -64,10 +53,29 @@ def analyze_values(
                 "unit": unit,
                 "reference_range": reference_range,
                 "status": status,
-                "context": "\n".join(retrieved),
-                "retrieval_error": retrieval_error,
+                "context": "",
+                "retrieval_error": None,
             }
         )
+
+    queries = [f"{row['test']} {row['status']} meaning" for row in rows]
+
+    try:
+        retrieved_contexts = retrieve_many(queries)
+    except Exception:
+        # Preserve the previous per-test error handling if a batch cannot run.
+        retrieved_contexts = []
+        for query in queries:
+            try:
+                retrieved_contexts.append(retrieve(query))
+            except Exception as exc:
+                retrieved_contexts.append([])
+                rows[len(retrieved_contexts) - 1]["retrieval_error"] = str(exc)
+
+    context_parts = []
+    for row, retrieved in zip(rows, retrieved_contexts):
+        row["context"] = "\n".join(retrieved)
+        context_parts.extend(retrieved)
 
     abnormal_labs = [
         row
@@ -80,11 +88,8 @@ def analyze_values(
         abnormal_labs,
     )
 
-    medication_context = ""
-
-    for med in medication_results:
-
-        medication_context += f"""
+    medication_context = "".join(
+        f"""
 Medication: {med.get('medication')}
 
 Purpose:
@@ -103,6 +108,8 @@ Lab Warnings:
 {', '.join(med.get('lab_warnings', [])) if med.get('lab_warnings') else 'None'}
 
 """
+        for med in medication_results
+    )
 
     findings_text = format_findings(rows)
     context_text = "\n".join(context_parts)
