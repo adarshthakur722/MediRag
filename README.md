@@ -107,11 +107,85 @@ GROQ_API_KEY="your_api_key_here"
 
 You can turn off AI generation in the sidebar and still use PDF extraction, range checking, and retrieval.
 
-### Security
+#### Important
 
 Do not commit API keys or other secrets to the repository.
 
 The `.env` file should remain private and should be included in `.gitignore`.
+
+## Using MediRag
+
+### Step 1 — Login
+
+Create an account or log in using the authentication interface.
+
+### Step 2 — Upload Laboratory Report
+
+Upload one or more laboratory report PDFs.
+
+### Step 3 — Enter Medications
+
+Optionally enter currently used medications, separated by commas.
+
+Example:
+
+```text
+Glycomet, Dolo 650, Atorvastatin
+```
+
+### Step 4 — Submit the Report
+
+MediRag extracts the laboratory values and compares them with their reference ranges.
+
+### Step 5 — View Analysis
+
+The application displays:
+
+- Laboratory values
+- Reference ranges
+- Classification status
+- Relevant medical information
+- AI-generated explanations
+
+### Step 6 — Review Medication Awareness
+
+If medications were entered, MediRag retrieves available medication information and incorporates relevant medication-related observations.
+
+### Step 7 — Generate Doctor Questions
+
+The application can generate questions that may be discussed with a healthcare professional.
+
+### Step 8 — Download the Report
+
+The completed analysis can be exported as a downloadable PDF report.
+
+## Limitations
+
+MediRag is a student-developed prototype and has several limitations:
+
+- The application is intended for educational and informational purposes.
+- It should not be used as a substitute for professional medical advice.
+- The current PDF extraction works best with text-based laboratory reports.
+- Scanned documents may require OCR before processing.
+- Medical information retrieved from external sources may be incomplete or unavailable.
+- AI-generated explanations may contain errors and should be verified by a qualified healthcare professional.
+- Medication information depends on the availability and quality of the external medication data source.
+- The system should not be used for autonomous diagnosis or treatment decisions.
+
+## Future Enhancements
+
+Potential future improvements include:
+
+- OCR support for scanned laboratory reports.
+- Support for additional laboratory-report formats.
+- Improved laboratory test-name normalization.
+- Expanded medical knowledge sources.
+- More comprehensive medication interaction detection.
+- Improved multilingual support.
+- More advanced retrieval and ranking techniques.
+- Enhanced evaluation using larger and more diverse test datasets.
+- Improved deployment scalability and monitoring.
+- Integration with additional trusted medical information sources.
 
 ## Team
 
